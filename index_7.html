@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akuruna Media — Berita Dunia, Crypto & Keuangan</title>
+<meta name="description" content="Akuruna Media: portal berita dunia, politik, teknologi, bisnis, crypto dan keuangan dalam Bahasa Indonesia.">
+<style>
+  :root{
+    --bg:#06130c;
+    --bg-2:#0b1f14;
+    --card:#0f2a1b;
+    --card-hover:#143723;
+    --line:#1d4830;
+    --text:#e8f5ec;
+    --muted:#9fc4ac;
+    --accent:#34d374;
+    --accent-2:#8ff0b4;
+    --accent-dark:#0e7c3f;
+    --hero-grad:linear-gradient(135deg,#0e3a22 0%,#06130c 60%);
+    --header-bg:rgba(6,19,12,.92);
+    --tag-bg:rgba(52,211,116,.14);
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  [data-theme="light"]{
+    --bg:#eef7f0;
+    --bg-2:#e2f0e6;
+    --card:#ffffff;
+    --card-hover:#f2faf4;
+    --line:#c8e2d0;
+    --text:#0c2416;
+    --muted:#4d7a5d;
+    --accent:#0e7c3f;
+    --accent-2:#0a5c2f;
+    --accent-dark:#0e7c3f;
+    --hero-grad:linear-gradient(135deg,#cdeed8 0%,#eef7f0 60%);
+    --header-bg:rgba(238,247,240,.92);
+    --tag-bg:rgba(14,124,63,.12);
+    --shadow:0 10px 30px rgba(12,36,22,.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--text);
+    transition:background .35s,color .35s;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  /* ===== Ticker ===== */
+  .ticker{
+    background:var(--accent-dark);color:#eafff1;
+    overflow:hidden;white-space:nowrap;font-size:.85rem;
+  }
+  .ticker-track{display:inline-block;padding:8px 0;animation:scroll 40s linear infinite}
+  .ticker-track span{margin:0 26px}
+  .up{color:#a5ffc8;font-weight:700}
+  .down{color:#ffb3b3;font-weight:700}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ===== Header ===== */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:var(--header-bg);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    max-width:1200px;margin:auto;padding:14px 20px;
+    display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.35rem;letter-spacing:.5px}
+  .logo-mark{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+    display:grid;place-items:center;color:#04170c;font-size:1.1rem;font-weight:900;
+  }
+  .logo em{color:var(--accent);font-style:normal}
+  nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+  nav a{
+    padding:8px 14px;border-radius:999px;font-size:.92rem;color:var(--muted);
+    transition:.2s;
+  }
+  nav a:hover,nav a.active{background:var(--tag-bg);color:var(--accent)}
+  .theme-btn{
+    border:1px solid var(--line);background:var(--card);color:var(--text);
+    padding:8px 16px;border-radius:999px;cursor:pointer;font-size:.9rem;
+    transition:.2s;
+  }
+  .theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .live-badge{
+    display:none;align-items:center;gap:7px;font-size:.78rem;font-weight:800;
+    color:var(--accent);letter-spacing:1px;
+  }
+  .live-badge.on{display:inline-flex}
+  .live-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);
+    animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
+
+  /* ===== Layout ===== */
+  .wrap{max-width:1200px;margin:auto;padding:28px 20px}
+
+  /* ===== Hero ===== */
+  .hero{
+    background:var(--hero-grad);
+    border:1px solid var(--line);border-radius:20px;
+    padding:42px 38px;display:grid;grid-template-columns:1.4fr 1fr;gap:34px;
+    box-shadow:var(--shadow);
+  }
+  .tag{
+    display:inline-block;background:var(--tag-bg);color:var(--accent);
+    font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    padding:5px 12px;border-radius:999px;margin-bottom:14px;
+  }
+  .hero h1{font-size:2rem;line-height:1.25;margin-bottom:14px}
+  .hero p{color:var(--muted);line-height:1.7;margin-bottom:18px}
+  .btn{
+    display:inline-block;background:var(--accent);color:#04170c;
+    font-weight:700;padding:11px 22px;border-radius:999px;transition:.2s;
+  }
+  .btn:hover{filter:brightness(1.1)}
+  .hero-side{display:flex;flex-direction:column;gap:14px;justify-content:center}
+  .mini{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;transition:.2s;
+  }
+  .mini:hover{background:var(--card-hover);transform:translateY(-2px)}
+  .mini .k{font-size:.72rem;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+  .mini .t{font-size:.95rem;font-weight:600;margin-top:4px;line-height:1.45}
+  .meta{font-size:.78rem;color:var(--muted);margin-top:6px}
+
+  /* ===== Sections ===== */
+  .section-head{
+    display:flex;align-items:center;gap:14px;margin:44px 0 20px;
+  }
+  .section-head h2{font-size:1.4rem}
+  .section-head .bar{width:46px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent-dark))}
+  .section-head a{margin-left:auto;color:var(--accent);font-size:.88rem;font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;transition:.25s;display:flex;flex-direction:column;
+  }
+  .card:hover{background:var(--card-hover);transform:translateY(-4px);box-shadow:var(--shadow)}
+  .thumb{height:175px;overflow:hidden;position:relative}
+  .thumb svg{width:100%;height:100%;display:block}
+  .card:hover .thumb svg{transform:scale(1.05)}
+  .thumb svg{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+  .hero-art{border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .hero-art svg{width:100%;height:auto;display:block}
+
+  /* ===== Scroll reveal ===== */
+  .reveal{opacity:0;transform:translateY(30px);
+    transition:opacity .8s ease,transform .8s cubic-bezier(.22,1,.36,1)}
+  .reveal.show{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+  }
+  .card-body{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .card-body h3{font-size:1.02rem;line-height:1.45}
+  .card-body p{font-size:.86rem;color:var(--muted);line-height:1.6;flex:1}
+
+  /* ===== Crypto table ===== */
+  .split{display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start}
+  table{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  th,td{padding:13px 16px;text-align:left;font-size:.9rem}
+  th{background:var(--bg-2);color:var(--accent);font-size:.78rem;text-transform:uppercase;letter-spacing:1px}
+  tr+tr td{border-top:1px solid var(--line)}
+  .side-panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .side-panel h3{font-size:1rem;margin-bottom:14px;color:var(--accent)}
+  .side-panel ol{list-style:none;counter-reset:n}
+  .side-panel li{counter-increment:n;display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:.9rem;line-height:1.5}
+  .side-panel li:first-of-type{border-top:none}
+  .side-panel li::before{content:counter(n,decimal-leading-zero);color:var(--accent);font-weight:800}
+
+  /* ===== Newsletter & footer ===== */
+  .newsletter{
+    margin-top:52px;background:var(--hero-grad);border:1px solid var(--line);
+    border-radius:20px;padding:38px;text-align:center;
+  }
+  .newsletter h2{margin-bottom:8px}
+  .newsletter p{color:var(--muted);margin-bottom:20px}
+  .newsletter form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .newsletter input{
+    padding:12px 18px;border-radius:999px;border:1px solid var(--line);
+    background:var(--card);color:var(--text);min-width:280px;font-size:.95rem;
+  }
+  .newsletter input:focus{outline:2px solid var(--accent)}
+  footer{border-top:1px solid var(--line);margin-top:52px;background:var(--bg-2)}
+  .foot-inner{max-width:1200px;margin:auto;padding:34px 20px;
+    display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
+  .foot-inner h4{color:var(--accent);margin-bottom:12px;font-size:.95rem}
+  .foot-inner p,.foot-inner a{color:var(--muted);font-size:.88rem;line-height:1.8;display:block}
+  .foot-inner a:hover{color:var(--accent)}
+  .copy{text-align:center;padding:16px;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line)}
+
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;padding:28px 22px}
+    .grid{grid-template-columns:1fr 1fr}
+    .split{grid-template-columns:1fr}
+    .foot-inner{grid-template-columns:1fr}
+  }
+  @media(max-width:600px){
+    .grid{grid-template-columns:1fr}
+    nav{display:none}
+  }
+
+  /* ===== Halaman baca artikel Redaksi (overlay) ===== */
+  .reader{
+    position:fixed;inset:0;z-index:100;display:none;
+    align-items:flex-start;justify-content:center;overflow-y:auto;
+    background:rgba(3,10,6,.78);backdrop-filter:blur(8px);
+    padding:40px 16px 60px;
+  }
+  .reader.open{display:flex}
+  .reader-box{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;
+    max-width:820px;width:100%;padding:36px;position:relative;
+    box-shadow:var(--shadow);animation:readerIn .35s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes readerIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+  .reader-close{
+    position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:var(--bg-2);color:var(--text);
+    font-size:1rem;cursor:pointer;transition:.2s;
+  }
+  .reader-close:hover{border-color:var(--accent);color:var(--accent)}
+  .reader-box h1{font-size:1.7rem;line-height:1.3;margin:12px 0 8px}
+  .reader-content{margin-top:18px}
+  .reader-content p{margin:13px 0;line-height:1.85;color:var(--text);font-size:1rem}
+  .reader-content img{border-radius:14px;margin:16px 0;max-width:100%;height:auto}
+  .reader-content h2,.reader-content h3{margin:22px 0 10px;color:var(--accent-2)}
+  .reader-content a{color:var(--accent);text-decoration:underline}
+  .reader-content blockquote{
+    border-left:4px solid var(--accent);padding:8px 18px;margin:16px 0;
+    background:var(--bg-2);border-radius:0 12px 12px 0;color:var(--muted);
+  }
+  .reader-content ul,.reader-content ol{margin:12px 0 12px 24px;line-height:1.8}
+  @media(max-width:600px){.reader-box{padding:24px 18px}.reader-box h1{font-size:1.35rem}}
+</style>
+</head>
+<body data-theme="dark">
+
+<div class="ticker" aria-label="Harga pasar">
+  <div class="ticker-track" id="ticker">
+    <span>₿ BTC <b class="up">$60.900 ▲</b></span>
+    <span>Ξ ETH <b class="up">$3.480 ▲</b></span>
+    <span>◎ SOL <b class="up">$168 ▲</b></span>
+    <span>✕ XRP <b class="down">$1,92 ▼</b></span>
+    <span>IHSG <b class="up">7.412 ▲</b></span>
+    <span>USD/IDR <b class="down">Rp16.180 ▼</b></span>
+    <span>Emas <b class="up">$3.310/oz ▲</b></span>
+    <span>Minyak Brent <b class="down">$74,2 ▼</b></span>
+    <span>₿ BTC <b class="up">$60.900 ▲</b></span>
+    <span>Ξ ETH <b class="up">$3.480 ▲</b></span>
+    <span>◎ SOL <b class="up">$168 ▲</b></span>
+    <span>✕ XRP <b class="down">$1,92 ▼</b></span>
+    <span>IHSG <b class="up">7.412 ▲</b></span>
+    <span>USD/IDR <b class="down">Rp16.180 ▼</b></span>
+    <span>Emas <b class="up">$3.310/oz ▲</b></span>
+    <span>Minyak Brent <b class="down">$74,2 ▼</b></span>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <span class="logo-mark">A</span>
+      Akuruna&nbsp;<em>Media</em>
+    </a>
+    <nav>
+      <a href="#" class="active">Beranda</a>
+      <a href="#dunia">Dunia &amp; Politik</a>
+      <a href="#tekno">Teknologi &amp; Bisnis</a>
+      <a href="#crypto">Crypto &amp; Keuangan</a>
+      <a href="#indonesia">Indonesia</a>
+      <a href="#redaksi">Redaksi</a>
+    </nav>
+    <span class="live-badge" id="liveBadge"><span class="live-dot"></span>LIVE</span>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">☀️ Mode Terang</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <span class="tag" id="heroTag">Berita Utama · Crypto</span>
+      <h1 id="heroTitle">Bitcoin dan Ethereum Melonjak Setelah Laporan Inflasi AS Lebih Lunak dari Perkiraan</h1>
+      <p id="heroDesc">Pasar kripto menguat tajam pekan ini setelah data inflasi Amerika Serikat menunjukkan pelunakan yang melebihi ekspektasi analis. Bitcoin diperdagangkan di kisaran $60.000-an, sementara Ethereum disebut para analis "semakin menarik" bagi investor institusional menjelang paruh kedua 2026.</p>
+      <a class="btn" href="#crypto" id="heroLink">Baca Selengkapnya →</a>
+    </div>
+    <div class="hero-side">
+      <div class="hero-art">
+        <svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi Bitcoin dan grafik naik">
+          <defs>
+            <linearGradient id="hbg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/>
+            </linearGradient>
+            <linearGradient id="harea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#34d374" stop-opacity=".45"/>
+              <stop offset="1" stop-color="#34d374" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="hcoin" cx=".35" cy=".3" r="1">
+              <stop offset="0" stop-color="#a8f5c6"/><stop offset=".55" stop-color="#34d374"/><stop offset="1" stop-color="#0e7c3f"/>
+            </radialGradient>
+          </defs>
+          <rect width="500" height="240" fill="url(#hbg)"/>
+          <g stroke="#1d4830" stroke-width="1">
+            <line x1="0" y1="60" x2="500" y2="60"/><line x1="0" y1="120" x2="500" y2="120"/><line x1="0" y1="180" x2="500" y2="180"/>
+            <line x1="100" y1="0" x2="100" y2="240"/><line x1="200" y1="0" x2="200" y2="240"/><line x1="300" y1="0" x2="300" y2="240"/><line x1="400" y1="0" x2="400" y2="240"/>
+          </g>
+          <path d="M0,200 L70,185 L130,192 L190,150 L250,160 L310,110 L380,120 L450,60 L500,70 L500,240 L0,240 Z" fill="url(#harea)"/>
+          <path d="M0,200 L70,185 L130,192 L190,150 L250,160 L310,110 L380,120 L450,60 L500,70" fill="none" stroke="#34d374" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="450" cy="60" r="7" fill="#a8f5c6"/>
+          <circle cx="120" cy="80" r="52" fill="url(#hcoin)"/>
+          <circle cx="120" cy="80" r="52" fill="none" stroke="#a8f5c6" stroke-width="3" opacity=".7"/>
+          <text x="120" y="100" font-size="58" font-weight="800" text-anchor="middle" fill="#04170c" font-family="Arial">₿</text>
+          <g fill="#8ff0b4" opacity=".8">
+            <circle cx="330" cy="40" r="3"/><circle cx="220" cy="25" r="2"/><circle cx="420" cy="150" r="2.5"/><circle cx="60" cy="170" r="2"/>
+          </g>
+        </svg>
+      </div>
+      <a class="mini" href="#dunia">
+        <div class="k">Dunia</div>
+        <div class="t">PBB Dorong Tata Kelola AI Global di Tengah Peringatan "Bahaya Katastrofik"</div>
+        <div class="meta">Dunia & Politik · 17 Juli 2026</div>
+      </a>
+      <a class="mini" href="#indonesia">
+        <div class="k">Indonesia</div>
+        <div class="t">Ekonomi Indonesia Diproyeksikan Tumbuh 4,7–5,5% pada 2026</div>
+        <div class="meta">Ekonomi · 3 Juli 2026</div>
+      </a>
+      <a class="mini" href="#crypto">
+        <div class="k">Pasar</div>
+        <div class="t">Harga Kripto Sempat Terkoreksi Menyusul Eskalasi Ketegangan AS–Iran</div>
+        <div class="meta">Crypto & Keuangan · 8 Juli 2026</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- DUNIA & POLITIK -->
+  <section id="dunia">
+    <div class="section-head">
+      <div class="bar"></div><h2>Dunia &amp; Politik</h2>
+      <a href="#dunia">Lihat Semua →</a>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi globe dan jaringan AI">
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g1)"/>
+            <circle cx="200" cy="100" r="62" fill="#0f2a1b" stroke="#34d374" stroke-width="2.5"/>
+            <ellipse cx="200" cy="100" rx="62" ry="24" fill="none" stroke="#34d374" stroke-width="1.5" opacity=".7"/>
+            <ellipse cx="200" cy="100" rx="26" ry="62" fill="none" stroke="#34d374" stroke-width="1.5" opacity=".7"/>
+            <line x1="138" y1="100" x2="262" y2="100" stroke="#34d374" stroke-width="1.5" opacity=".7"/>
+            <g stroke="#8ff0b4" stroke-width="1.5" opacity=".85">
+              <line x1="262" y1="100" x2="330" y2="60"/><line x1="248" y1="55" x2="310" y2="30"/>
+              <line x1="138" y1="100" x2="70" y2="140"/><line x1="152" y1="145" x2="95" y2="175"/>
+            </g>
+            <g fill="#8ff0b4">
+              <circle cx="330" cy="60" r="6"/><circle cx="310" cy="30" r="4.5"/>
+              <circle cx="70" cy="140" r="6"/><circle cx="95" cy="175" r="4.5"/>
+            </g>
+            <g fill="#34d374" opacity=".6"><circle cx="355" cy="150" r="2.5"/><circle cx="45" cy="45" r="2.5"/><circle cx="370" cy="105" r="2"/></g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>PBB Serukan Kerangka Tata Kelola AI Global, Ingatkan Potensi "Bahaya Katastrofik"</h3>
+          <p>Sidang PBB Juli 2026 mendorong kesepakatan internasional untuk mengatur kecerdasan buatan, seiring kekhawatiran meningkatnya penyalahgunaan teknologi lintas negara.</p>
+          <div class="meta">Politik Global · 17 Juli 2026</div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi kilang minyak di malam hari">
+            <defs><linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a2415"/><stop offset="1" stop-color="#04120a"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g2)"/>
+            <circle cx="330" cy="45" r="24" fill="#8ff0b4" opacity=".9"/>
+            <circle cx="322" cy="40" r="20" fill="#0a2415"/>
+            <g fill="#8ff0b4" opacity=".55"><circle cx="60" cy="35" r="2"/><circle cx="150" cy="25" r="1.6"/><circle cx="250" cy="50" r="2"/><circle cx="380" cy="90" r="1.6"/></g>
+            <g stroke="#34d374" stroke-width="4" stroke-linecap="round" fill="none">
+              <path d="M110,165 L145,55 L180,165"/><line x1="122" y1="128" x2="168" y2="128"/><line x1="116" y1="147" x2="174" y2="147"/><line x1="129" y1="108" x2="161" y2="108"/>
+            </g>
+            <circle cx="145" cy="55" r="6" fill="#a8f5c6"/>
+            <g fill="#0f2a1b" stroke="#34d374" stroke-width="2.5">
+              <rect x="230" y="120" width="46" height="45" rx="6"/>
+              <rect x="286" y="120" width="46" height="45" rx="6"/>
+            </g>
+            <g stroke="#8ff0b4" stroke-width="2"><line x1="236" y1="142" x2="270" y2="142"/><line x1="292" y1="142" x2="326" y2="142"/></g>
+            <line x1="40" y1="166" x2="370" y2="166" stroke="#1d4830" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>Ketegangan AS–Iran Guncang Pasar Energi dan Aset Berisiko Global</h3>
+          <p>Serangan awal Juli memicu lonjakan singkat harga minyak dan koreksi aset berisiko, sebelum pasar kembali stabil menjelang pertengahan bulan.</p>
+          <div class="meta">Geopolitik · 8 Juli 2026</div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi gedung bank sentral">
+            <defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g3)"/>
+            <polygon points="200,30 110,75 290,75" fill="#0f2a1b" stroke="#34d374" stroke-width="2.5"/>
+            <rect x="118" y="82" width="164" height="10" fill="#34d374" opacity=".85"/>
+            <g fill="#0f2a1b" stroke="#34d374" stroke-width="2.5">
+              <rect x="130" y="96" width="18" height="60"/><rect x="166" y="96" width="18" height="60"/>
+              <rect x="202" y="96" width="18" height="60"/><rect x="238" y="96" width="18" height="60"/>
+            </g>
+            <rect x="112" y="160" width="176" height="12" fill="#34d374" opacity=".85"/>
+            <circle cx="330" cy="60" r="30" fill="none" stroke="#8ff0b4" stroke-width="2.5"/>
+            <text x="330" y="72" font-size="34" font-weight="800" text-anchor="middle" fill="#8ff0b4" font-family="Arial">%</text>
+            <g fill="#34d374" opacity=".55"><circle cx="60" cy="140" r="2.5"/><circle cx="75" cy="55" r="2"/><circle cx="355" cy="150" r="2"/></g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>Ekonomi Dunia Bergerak Hati-hati: Bank Sentral Utama Timbang Arah Suku Bunga</h3>
+          <p>Pelonggaran inflasi AS membuka ruang penurunan suku bunga, namun bank sentral Eropa dan Asia masih menunggu kepastian data paruh kedua 2026.</p>
+          <div class="meta">Ekonomi Global · 15 Juli 2026</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- TEKNOLOGI & BISNIS -->
+  <section id="tekno">
+    <div class="section-head">
+      <div class="bar"></div><h2>Teknologi &amp; Bisnis</h2>
+      <a href="#tekno">Lihat Semua →</a>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi cip AI">
+            <defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g4)"/>
+            <rect x="150" y="55" width="100" height="90" rx="12" fill="#0f2a1b" stroke="#34d374" stroke-width="3"/>
+            <text x="200" y="112" font-size="30" font-weight="800" text-anchor="middle" fill="#8ff0b4" font-family="Arial">AI</text>
+            <g stroke="#34d374" stroke-width="2.5" stroke-linecap="round">
+              <line x1="150" y1="75" x2="100" y2="75"/><line x1="150" y1="100" x2="90" y2="100"/><line x1="150" y1="125" x2="100" y2="125"/>
+              <line x1="250" y1="75" x2="300" y2="75"/><line x1="250" y1="100" x2="310" y2="100"/><line x1="250" y1="125" x2="300" y2="125"/>
+              <line x1="175" y1="55" x2="175" y2="25"/><line x1="200" y1="55" x2="200" y2="18"/><line x1="225" y1="55" x2="225" y2="25"/>
+              <line x1="175" y1="145" x2="175" y2="175"/><line x1="200" y1="145" x2="200" y2="182"/><line x1="225" y1="145" x2="225" y2="175"/>
+            </g>
+            <g fill="#8ff0b4">
+              <circle cx="100" cy="75" r="4"/><circle cx="90" cy="100" r="4"/><circle cx="100" cy="125" r="4"/>
+              <circle cx="300" cy="75" r="4"/><circle cx="310" cy="100" r="4"/><circle cx="300" cy="125" r="4"/>
+              <circle cx="175" cy="25" r="4"/><circle cx="200" cy="18" r="4"/><circle cx="225" cy="25" r="4"/>
+              <circle cx="175" cy="175" r="4"/><circle cx="200" cy="182" r="4"/><circle cx="225" cy="175" r="4"/>
+            </g>
+            <g fill="#34d374" opacity=".5"><circle cx="50" cy="45" r="2.5"/><circle cx="350" cy="160" r="2.5"/><circle cx="345" cy="40" r="2"/></g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>Persaingan AI Kian Panas: Anthropic, OpenAI, Google, dan Meta Rilis Pembaruan Besar</h3>
+          <p>Pertengahan Juli 2026 diwarnai gelombang peluncuran model dan fitur AI baru dari para raksasa teknologi, memperketat persaingan pasar asisten cerdas.</p>
+          <div class="meta">Teknologi · 17 Juli 2026</div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi grafik candlestick naik">
+            <defs><linearGradient id="g5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g5)"/>
+            <g stroke="#1d4830" stroke-width="1"><line x1="0" y1="60" x2="400" y2="60"/><line x1="0" y1="110" x2="400" y2="110"/><line x1="0" y1="160" x2="400" y2="160"/></g>
+            <g stroke="#34d374" stroke-width="2.5">
+              <line x1="80" y1="105" x2="80" y2="175"/><line x1="130" y1="90" x2="130" y2="160"/>
+              <line x1="180" y1="70" x2="180" y2="140"/><line x1="230" y1="85" x2="230" y2="150"/>
+              <line x1="280" y1="45" x2="280" y2="115"/><line x1="330" y1="28" x2="330" y2="95"/>
+            </g>
+            <g fill="#34d374">
+              <rect x="70" y="118" width="20" height="42" rx="3"/><rect x="120" y="103" width="20" height="40" rx="3"/>
+              <rect x="170" y="82" width="20" height="42" rx="3"/>
+              <rect x="270" y="58" width="20" height="42" rx="3"/><rect x="320" y="40" width="20" height="40" rx="3"/>
+            </g>
+            <rect x="220" y="98" width="20" height="38" rx="3" fill="#0f2a1b" stroke="#34d374" stroke-width="2"/>
+            <path d="M60,150 Q200,130 340,55" fill="none" stroke="#8ff0b4" stroke-width="2.5" stroke-dasharray="6 7" opacity=".9"/>
+            <polygon points="352,42 336,46 346,60" fill="#8ff0b4"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>Nvidia dan Saham Teknologi Topang Reli Bursa Global</h3>
+          <p>Permintaan cip AI yang belum surut menjaga momentum saham teknologi, mengangkat indeks utama Wall Street ke level tertinggi baru.</p>
+          <div class="meta">Bisnis · 16 Juli 2026</div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi roket startup meluncur">
+            <defs><linearGradient id="g6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/></linearGradient>
+            <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8f5c6"/><stop offset="1" stop-color="#34d374" stop-opacity="0"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g6)"/>
+            <g fill="#8ff0b4" opacity=".6"><circle cx="70" cy="40" r="2"/><circle cx="320" cy="30" r="2.5"/><circle cx="360" cy="120" r="2"/><circle cx="50" cy="150" r="2"/><circle cx="140" cy="25" r="1.6"/></g>
+            <g transform="rotate(38 200 100)">
+              <path d="M200,30 C222,58 226,95 218,130 L182,130 C174,95 178,58 200,30 Z" fill="#0f2a1b" stroke="#34d374" stroke-width="3"/>
+              <circle cx="200" cy="80" r="13" fill="#04120a" stroke="#8ff0b4" stroke-width="2.5"/>
+              <path d="M182,105 L158,140 L182,132 Z" fill="#34d374"/>
+              <path d="M218,105 L242,140 L218,132 Z" fill="#34d374"/>
+              <path d="M192,132 L200,185 L208,132 Z" fill="url(#flame)"/>
+            </g>
+            <g stroke="#34d374" stroke-width="2.5" stroke-linecap="round" opacity=".7">
+              <line x1="95" y1="160" x2="120" y2="145"/><line x1="80" y1="140" x2="98" y2="129"/><line x1="112" y1="178" x2="140" y2="161"/>
+            </g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>Startup Asia Tenggara Berburu Pendanaan di Sektor Fintech dan AI</h3>
+          <p>Investor kawasan kembali agresif menyuntik modal ke startup keuangan digital, dengan Indonesia menjadi salah satu pasar paling diminati.</p>
+          <div class="meta">Startup · 14 Juli 2026</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- CRYPTO & KEUANGAN -->
+  <section id="crypto">
+    <div class="section-head">
+      <div class="bar"></div><h2>Crypto &amp; Keuangan</h2>
+      <a href="#crypto">Lihat Semua →</a>
+    </div>
+    <div class="split">
+      <div>
+        <table>
+          <thead>
+            <tr><th>Aset</th><th>Harga</th><th>24 Jam</th><th>Sentimen</th></tr>
+          </thead>
+          <tbody id="cryptoBody">
+            <tr><td>₿ Bitcoin (BTC)</td><td>$60.900</td><td class="up">+2,8%</td><td>Bullish</td></tr>
+            <tr><td>Ξ Ethereum (ETH)</td><td>$3.480</td><td class="up">+3,4%</td><td>Bullish</td></tr>
+            <tr><td>◎ Solana (SOL)</td><td>$168</td><td class="up">+1,9%</td><td>Netral</td></tr>
+            <tr><td>✕ XRP</td><td>$1,92</td><td class="down">−0,7%</td><td>Netral</td></tr>
+            <tr><td>🟡 BNB</td><td>$705</td><td class="up">+1,2%</td><td>Netral</td></tr>
+          </tbody>
+        </table>
+        <p class="meta" style="margin-top:10px" id="priceNote">* Memuat harga langsung dari CoinGecko… (jika gagal, harga ilustratif per Juli 2026 yang ditampilkan)</p>
+      </div>
+      <aside class="side-panel">
+        <h3>🔥 Terpopuler Pekan Ini</h3>
+        <ol id="popularList">
+          <li>BTC &amp; ETH melesat usai laporan inflasi AS melunak</li>
+          <li>Analis: Ethereum "semakin menarik" untuk institusi</li>
+          <li>Kripto naik hampir 3% dalam sepekan</li>
+          <li>Koreksi singkat pasar usai ketegangan AS–Iran</li>
+          <li>Menkeu Purbaya paparkan APBN KiTa Juni 2026</li>
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <!-- INDONESIA -->
+  <section id="indonesia">
+    <div class="section-head">
+      <div class="bar"></div><h2>Kabar Indonesia</h2>
+      <a href="#indonesia">Lihat Semua →</a>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi Monas dan grafik pertumbuhan">
+            <defs><linearGradient id="g7" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g7)"/>
+            <g>
+              <polygon points="120,35 112,150 128,150" fill="#0f2a1b" stroke="#34d374" stroke-width="2.5"/>
+              <polygon points="120,18 112,38 128,38" fill="#8ff0b4"/>
+              <rect x="96" y="150" width="48" height="10" rx="3" fill="#34d374"/>
+              <rect x="84" y="160" width="72" height="10" rx="3" fill="#0f2a1b" stroke="#34d374" stroke-width="2"/>
+            </g>
+            <g>
+              <rect x="210" y="120" width="26" height="50" rx="4" fill="#34d374" opacity=".55"/>
+              <rect x="248" y="95" width="26" height="75" rx="4" fill="#34d374" opacity=".75"/>
+              <rect x="286" y="70" width="26" height="100" rx="4" fill="#34d374"/>
+              <rect x="324" y="45" width="26" height="125" rx="4" fill="#8ff0b4"/>
+            </g>
+            <path d="M215,110 L260,85 L298,58 L335,32" fill="none" stroke="#a8f5c6" stroke-width="2.5" stroke-dasharray="5 6"/>
+            <g transform="translate(30,30)">
+              <rect x="0" y="0" width="44" height="15" fill="#e05555" rx="2"/>
+              <rect x="0" y="15" width="44" height="15" fill="#f2faf4" rx="2"/>
+              <rect x="0" y="0" width="44" height="30" fill="none" stroke="#1d4830" stroke-width="1.5" rx="2"/>
+            </g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>BI dan Kemenkeu Proyeksikan Ekonomi Indonesia Tumbuh 4,7–5,5% Tahun Ini</h3>
+          <p>Proyeksi terbaru awal Juli menunjukkan optimisme pertumbuhan di tengah dinamika global, ditopang konsumsi domestik dan investasi.</p>
+          <div class="meta">Ekonomi · 3 Juli 2026</div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi uang stimulus rupiah">
+            <defs><linearGradient id="g8" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g8)"/>
+            <g transform="rotate(-8 190 110)">
+              <rect x="90" y="92" width="200" height="92" rx="10" fill="#0f2a1b" stroke="#34d374" stroke-width="2.5"/>
+            </g>
+            <rect x="100" y="78" width="200" height="92" rx="10" fill="#0f2a1b" stroke="#34d374" stroke-width="3"/>
+            <circle cx="200" cy="124" r="30" fill="none" stroke="#8ff0b4" stroke-width="2.5"/>
+            <text x="200" y="136" font-size="30" font-weight="800" text-anchor="middle" fill="#8ff0b4" font-family="Arial">Rp</text>
+            <g fill="none" stroke="#34d374" stroke-width="2" opacity=".7">
+              <circle cx="128" cy="150" r="9"/><circle cx="272" cy="98" r="9"/>
+            </g>
+            <g fill="#34d374">
+              <circle cx="320" cy="165" r="13"/><circle cx="345" cy="158" r="13"/>
+            </g>
+            <g fill="#a8f5c6" font-family="Arial" font-size="12" font-weight="700" text-anchor="middle">
+              <text x="320" y="169">Rp</text><text x="345" y="162">Rp</text>
+            </g>
+            <g fill="#8ff0b4" opacity=".6"><circle cx="60" cy="50" r="2.5"/><circle cx="340" cy="40" r="2"/><circle cx="45" cy="160" r="2"/></g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>Stimulus Rp26,34 Triliun Digelontorkan untuk Jaga Daya Tahan Ekonomi Rakyat</h3>
+          <p>DPR menilai paket stimulus pemerintah penting untuk menjaga daya beli masyarakat dan ketahanan ekonomi di paruh kedua 2026.</p>
+          <div class="meta">Kebijakan · Juli 2026</div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="thumb">
+          <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi perisai fiskal dan kurs rupiah">
+            <defs><linearGradient id="g9" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/></linearGradient></defs>
+            <rect width="400" height="200" fill="url(#g9)"/>
+            <path d="M200,30 L258,52 L258,110 C258,145 232,168 200,178 C168,168 142,145 142,110 L142,52 Z" fill="#0f2a1b" stroke="#34d374" stroke-width="3"/>
+            <text x="200" y="122" font-size="42" font-weight="800" text-anchor="middle" fill="#8ff0b4" font-family="Arial">Rp</text>
+            <path d="M60,140 Q90,90 120,120 T160,95" fill="none" stroke="#34d374" stroke-width="2.5" opacity=".65"/>
+            <path d="M250,105 Q285,60 320,95 T370,70" fill="none" stroke="#34d374" stroke-width="2.5" opacity=".65"/>
+            <g fill="#8ff0b4"><circle cx="160" cy="95" r="4"/><circle cx="370" cy="70" r="4"/></g>
+            <g fill="#34d374" opacity=".55"><circle cx="70" cy="45" r="2.5"/><circle cx="340" cy="160" r="2.5"/><circle cx="320" cy="35" r="2"/></g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <h3>Menkeu Purbaya Bongkar Strategi Fiskal Hadapi Fluktuasi Rupiah</h3>
+          <p>Dalam paparan APBN KiTa edisi Juni 2026, Menteri Keuangan menjelaskan langkah fiskal untuk menstabilkan nilai tukar dan menjaga defisit.</p>
+          <div class="meta">Fiskal · Juli 2026</div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- REDAKSI AKURUNA (tulisan Anda sendiri, dari WordPress) -->
+  <section id="redaksi">
+    <div class="section-head">
+      <div class="bar"></div><h2>Redaksi Akuruna</h2>
+      <a href="#redaksi">Tulisan Kami →</a>
+    </div>
+    <div class="grid" id="redaksiGrid"></div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <h2>📬 Langganan Akuruna Media</h2>
+    <p>Dapatkan ringkasan berita dunia, crypto, dan keuangan langsung ke email Anda setiap pagi.</p>
+    <form onsubmit="event.preventDefault();this.querySelector('input').value='';document.getElementById('nl-msg').textContent='✅ Terima kasih! Anda telah berlangganan.';">
+      <input type="email" placeholder="Alamat email Anda" required>
+      <button class="btn" type="submit">Berlangganan</button>
+    </form>
+    <p id="nl-msg" style="margin-top:12px;color:var(--accent);font-weight:600"></p>
+  </section>
+
+</main>
+
+<!-- Overlay baca artikel Redaksi (tema hijau, di dalam website) -->
+<div class="reader" id="reader">
+  <div class="reader-box">
+    <button class="reader-close" onclick="closeReader()" aria-label="Tutup">✕</button>
+    <span class="tag">Redaksi Akuruna</span>
+    <h1 id="readerTitle"></h1>
+    <div class="meta" id="readerMeta"></div>
+    <div class="reader-content" id="readerContent"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <a class="logo" href="#" style="margin-bottom:12px">
+        <span class="logo-mark">A</span>
+        Akuruna&nbsp;<em>Media</em>
+      </a>
+      <p>Portal berita independen yang menyajikan kabar dunia, politik, teknologi, bisnis, crypto, dan keuangan — cepat, akurat, dan berimbang.</p>
+    </div>
+    <div>
+      <h4>Rubrik</h4>
+      <a href="#dunia">Dunia &amp; Politik</a>
+      <a href="#tekno">Teknologi &amp; Bisnis</a>
+      <a href="#crypto">Crypto &amp; Keuangan</a>
+      <a href="#indonesia">Kabar Indonesia</a>
+    </div>
+    <div>
+      <h4>Tentang</h4>
+      <a href="#">Redaksi</a>
+      <a href="#">Pedoman Media Siber</a>
+      <a href="#">Kontak &amp; Iklan</a>
+      <a href="#">Kebijakan Privasi</a>
+    </div>
+  </div>
+  <div class="copy">© 2026 Akuruna Media. Seluruh hak cipta dilindungi.</div>
+</footer>
+
+<script>
+  // Tema disimpan di memori (bukan localStorage) selama halaman terbuka
+  var currentTheme = 'dark';
+  function toggleTheme(){
+    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', currentTheme);
+    document.getElementById('themeBtn').textContent =
+      currentTheme === 'dark' ? '☀️ Mode Terang' : '🌙 Mode Gelap';
+  }
+
+  // ===== Smooth scroll dengan easing halus =====
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function smoothScrollTo(targetY, duration){
+    var startY = window.pageYOffset;
+    var diff = targetY - startY;
+    var start = null;
+    function easeInOutCubic(t){
+      return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+    }
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      window.scrollTo(0, startY + diff * easeInOutCubic(p));
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      var id = this.getAttribute('href');
+      if(id.length < 2) return;
+      var target = document.querySelector(id);
+      if(!target) return;
+      e.preventDefault();
+      var headerH = document.querySelector('header').offsetHeight;
+      var y = target.getBoundingClientRect().top + window.pageYOffset - headerH - 16;
+      if(reduceMotion){ window.scrollTo(0, y); return; }
+      smoothScrollTo(y, 850);
+    });
+  });
+
+  // ===== Animasi muncul saat di-scroll (scroll reveal) =====
+  var revealTargets = document.querySelectorAll(
+    '.card, .mini, .hero-art, .section-head, .newsletter, table, .side-panel'
+  );
+  revealTargets.forEach(function(el){ el.classList.add('reveal'); });
+
+  if(reduceMotion || !('IntersectionObserver' in window)){
+    revealTargets.forEach(function(el){ el.classList.add('show'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var el = entry.target;
+          var siblings = Array.prototype.slice.call(el.parentElement.children);
+          var idx = Math.max(0, siblings.indexOf(el));
+          setTimeout(function(){ el.classList.add('show'); }, Math.min(idx, 4) * 110);
+          io.unobserve(el);
+        }
+      });
+    }, {threshold: .12, rootMargin: '0px 0px -40px 0px'});
+    revealTargets.forEach(function(el){ io.observe(el); });
+  }
+
+  // =====================================================
+  // ===== DATA REAL-TIME (harga crypto + berita RSS) =====
+  // =====================================================
+  var NF = new Intl.NumberFormat('id-ID');
+  var liveOK = {price:false, news:false};
+  function setLiveBadge(){
+    if(liveOK.price || liveOK.news){
+      document.getElementById('liveBadge').classList.add('on');
+    }
+  }
+  function esc(s){
+    var d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+  function stripHtml(s){
+    var d = new DOMParser().parseFromString(s || '', 'text/html');
+    return (d.body.textContent || '').replace(/\s+/g,' ').trim();
+  }
+  function fmtTgl(s){
+    var t = new Date(s);
+    if(isNaN(t)) return '';
+    return t.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+  }
+
+  // ---------- 1. Harga crypto live (CoinGecko, gratis tanpa API key) ----------
+  var COINS = [
+    ['bitcoin','₿ Bitcoin (BTC)','BTC'],
+    ['ethereum','Ξ Ethereum (ETH)','ETH'],
+    ['solana','◎ Solana (SOL)','SOL'],
+    ['ripple','✕ XRP','XRP'],
+    ['binancecoin','🟡 BNB','BNB']
+  ];
+  function fmtUsd(v){
+    if(v == null) return '—';
+    return v >= 1000 ? '$' + NF.format(Math.round(v)) : '$' + v.toFixed(2).replace('.', ',');
+  }
+  var hasBackend = location.protocol !== 'file:'; // backend hanya ada saat di-hosting
+  async function loadPrices(){
+    try{
+      var d = null;
+      // 1) Coba backend sendiri dulu (lebih cepat & stabil, jika sudah di-hosting)
+      if(hasBackend){
+        try{
+          var rb = await fetch('/api/prices');
+          if(rb.ok) d = await rb.json();
+        }catch(e){ /* lanjut ke fallback */ }
+      }
+      // 2) Fallback: langsung ke CoinGecko
+      if(!d){
+        var ids = COINS.map(function(c){return c[0];}).join(',');
+        var url = 'https://api.coingecko.com/api/v3/simple/price?ids=' + ids +
+                  '&vs_currencies=usd,idr&include_24hr_change=true';
+        var r = await fetch(url);
+        if(!r.ok) throw new Error('HTTP ' + r.status);
+        d = await r.json();
+      }
+
+      // Tabel
+      var rows = '';
+      COINS.forEach(function(c){
+        var p = d[c[0]]; if(!p) return;
+        var ch = p.usd_24h_change || 0;
+        var cls = ch >= 0 ? 'up' : 'down';
+        var sign = ch >= 0 ? '+' : '−';
+        var sent = ch >= 2 ? 'Bullish' : (ch <= -2 ? 'Bearish' : 'Netral');
+        rows += '<tr><td>' + c[1] + '</td><td>' + fmtUsd(p.usd) + '</td>' +
+                '<td class="' + cls + '">' + sign + Math.abs(ch).toFixed(1).replace('.', ',') + '%</td>' +
+                '<td>' + sent + '</td></tr>';
+      });
+      if(rows) document.getElementById('cryptoBody').innerHTML = rows;
+
+      // Ticker
+      var t = '';
+      COINS.forEach(function(c){
+        var p = d[c[0]]; if(!p) return;
+        var ch = p.usd_24h_change || 0;
+        t += '<span>' + c[2] + ' <b class="' + (ch >= 0 ? 'up' : 'down') + '">' +
+             fmtUsd(p.usd) + (ch >= 0 ? ' ▲' : ' ▼') + '</b></span>';
+      });
+      if(d.bitcoin && d.bitcoin.idr){
+        t += '<span>BTC/IDR <b class="up">Rp' + NF.format(Math.round(d.bitcoin.idr)) + '</b></span>';
+      }
+      if(t) document.getElementById('ticker').innerHTML = t + t; // digandakan agar loop mulus
+
+      document.getElementById('priceNote').textContent =
+        '● Live dari CoinGecko · diperbarui ' +
+        new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit', second:'2-digit'}) +
+        ' WIB · otomatis refresh tiap 60 detik';
+      liveOK.price = true; setLiveBadge();
+    }catch(e){
+      document.getElementById('priceNote').textContent =
+        '* Gagal memuat harga live — menampilkan harga ilustratif. Periksa koneksi internet lalu muat ulang.';
+    }
+  }
+
+  // ---------- 2. Berita otomatis dari RSS ----------
+  // Urutan percobaan: backend sendiri (/api/rss) → beberapa proxy publik
+  // bergantian. Satu mati, otomatis coba berikutnya (timeout 8 detik/percobaan).
+  var PROXIES = [
+    function(u){ return 'https://corsproxy.io/?url=' + encodeURIComponent(u); },
+    function(u){ return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u); },
+    function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }
+  ];
+  function fetchTimeout(url, ms){
+    var ctrl = new AbortController();
+    var t = setTimeout(function(){ ctrl.abort(); }, ms);
+    return fetch(url, {signal: ctrl.signal}).finally(function(){ clearTimeout(t); });
+  }
+  async function fetchRss(feedKey, feedUrl){
+    var text = null;
+    if(hasBackend && feedKey){
+      try{
+        var rb = await fetchTimeout('/api/rss?feed=' + feedKey, 8000);
+        if(rb.ok) text = await rb.text();
+      }catch(e){ /* lanjut ke proxy publik */ }
+    }
+    if(!text){
+      for(var i = 0; i < PROXIES.length && !text; i++){
+        try{
+          var r = await fetchTimeout(PROXIES[i](feedUrl), 8000);
+          if(r.ok){
+            var t2 = await r.text();
+            if(t2 && t2.indexOf('<') !== -1) text = t2; // pastikan bukan pesan error
+          }
+        }catch(e){ /* coba proxy berikutnya */ }
+      }
+    }
+    if(!text) throw new Error('Semua sumber gagal');
+    var xml = new DOMParser().parseFromString(text, 'text/xml');
+    if(xml.querySelector('parsererror')) throw new Error('XML tidak valid');
+    return Array.prototype.slice.call(xml.querySelectorAll('item')).map(function(it){
+      function g(tag){ var el = it.querySelector(tag); return el ? el.textContent : ''; }
+      return {
+        title: g('title').trim(),
+        link: g('link').trim(),
+        desc: stripHtml(g('description')).slice(0, 150),
+        date: g('pubDate')
+      };
+    }).filter(function(x){ return x.title; });
+  }
+
+  var FEEDS = [
+    {key:'dunia',     section:'#dunia',     cat:'Dunia & Politik',    src:'BBC Indonesia',  url:'https://feeds.bbci.co.uk/indonesia/rss.xml'},
+    {key:'tekno',     section:'#tekno',     cat:'Teknologi & Bisnis', src:'CNBC Indonesia', url:'https://www.cnbcindonesia.com/tech/rss'},
+    {key:'indonesia', section:'#indonesia', cat:'Kabar Indonesia',    src:'ANTARA News',    url:'https://www.antaranews.com/rss/ekonomi.xml'}
+  ];
+
+  function fillCards(sectionSel, items, cat, src){
+    var cards = document.querySelectorAll(sectionSel + ' .card');
+    cards.forEach(function(card, i){
+      var it = items[i]; if(!it) return;
+      card.querySelector('h3').innerHTML =
+        '<a href="' + esc(it.link) + '" target="_blank" rel="noopener">' + esc(it.title) + '</a>';
+      card.querySelector('p').textContent = it.desc ? it.desc + '…' : '';
+      card.querySelector('.meta').textContent =
+        cat + ' · ' + (fmtTgl(it.date) || 'Hari ini') + ' · ' + src;
+    });
+  }
+
+  async function loadNews(){
+    // Berita utama (hero) + Terpopuler: CNBC Indonesia Market (mencakup crypto & keuangan)
+    try{
+      var market = await fetchRss('market', 'https://www.cnbcindonesia.com/market/rss');
+      if(market.length){
+        var top = market[0];
+        document.getElementById('heroTag').textContent = 'Berita Utama · Live';
+        document.getElementById('heroTitle').textContent = top.title;
+        document.getElementById('heroDesc').textContent = (top.desc || '') + '…';
+        var hl = document.getElementById('heroLink');
+        hl.href = top.link; hl.target = '_blank'; hl.rel = 'noopener';
+
+        var pop = document.getElementById('popularList');
+        pop.innerHTML = market.slice(1, 6).map(function(it){
+          return '<li><a href="' + esc(it.link) + '" target="_blank" rel="noopener">' +
+                 esc(it.title) + '</a></li>';
+        }).join('');
+        liveOK.news = true; setLiveBadge();
+      }
+    }catch(e){ /* konten statis tetap tampil */ }
+
+    // Tiap rubrik — independen, gagal satu tidak mengganggu yang lain
+    var jobs = FEEDS.map(function(f){
+      return fetchRss(f.key, f.url).then(function(items){
+        if(items.length){ fillCards(f.section, items, f.cat, f.src); liveOK.news = true; setLiveBadge(); }
+      }).catch(function(){ /* konten statis tetap tampil */ });
+    });
+    await Promise.all(jobs);
+    // Beri tahu pengguna secara jujur jika semua sumber berita gagal dijangkau
+    if(!liveOK.news){
+      document.getElementById('heroTag').textContent =
+        'Berita Contoh · sumber live tidak terjangkau — coba muat ulang halaman';
+    }
+  }
+
+  // ---------- 3. Redaksi Akuruna: tulisan Anda sendiri dari WordPress ----------
+  // CARA PAKAI:
+  //   1. Buat blog gratis di https://wordpress.com (misal: akurunamedia.wordpress.com)
+  //   2. Isi alamatnya di baris WP_SITE di bawah ini, contoh:
+  //      var WP_SITE = 'akurunamedia.wordpress.com';
+  //   3. Setiap tulisan yang Anda terbitkan di WordPress otomatis muncul di sini.
+  var WP_SITE = 'akurunamedia.wordpress.com'; // ← alamat blog WordPress Anda
+
+  var THUMB_FALLBACK =
+    '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">' +
+    '<defs><linearGradient id="gw" x1="0" y1="0" x2="1" y2="1">' +
+    '<stop offset="0" stop-color="#0e3a22"/><stop offset="1" stop-color="#04120a"/>' +
+    '</linearGradient></defs><rect width="400" height="200" fill="url(#gw)"/>' +
+    '<circle cx="200" cy="86" r="34" fill="none" stroke="#34d374" stroke-width="3"/>' +
+    '<text x="200" y="98" font-size="32" font-weight="800" text-anchor="middle" ' +
+    'fill="#8ff0b4" font-family="Arial">A</text>' +
+    '<g stroke="#34d374" stroke-width="3" stroke-linecap="round" opacity=".8">' +
+    '<line x1="120" y1="145" x2="280" y2="145"/><line x1="145" y1="162" x2="255" y2="162"/></g></svg>';
+
+  function redaksiCard(inner, idx){
+    var click = (idx == null) ? '' :
+      ' style="cursor:pointer" onclick="openReader(' + idx + ')"';
+    return '<article class="card reveal show"' + click + '>' + inner + '</article>';
+  }
+
+  // ---- Pembaca artikel di dalam website (tema hijau) ----
+  var redaksiPosts = [];
+  function sanitizeHtml(html){
+    var doc = new DOMParser().parseFromString(html || '', 'text/html');
+    doc.querySelectorAll('script,style,iframe,object,embed,form,link,meta')
+      .forEach(function(el){ el.remove(); });
+    doc.querySelectorAll('*').forEach(function(el){
+      Array.prototype.slice.call(el.attributes).forEach(function(a){
+        if(/^on/i.test(a.name)) el.removeAttribute(a.name);
+      });
+      var href = el.getAttribute && el.getAttribute('href');
+      if(href && /^javascript:/i.test(href)) el.removeAttribute('href');
+      if(el.tagName === 'A'){ el.setAttribute('target','_blank'); el.setAttribute('rel','noopener'); }
+    });
+    return doc.body.innerHTML;
+  }
+  function openReader(i){
+    var p = redaksiPosts[i]; if(!p) return;
+    document.getElementById('readerTitle').textContent = stripHtml(p.title);
+    document.getElementById('readerMeta').textContent =
+      'Redaksi Akuruna · ' + (fmtTgl(p.date) || '');
+    var img = p.featured_image
+      ? '<img src="' + esc(p.featured_image) + '" alt="">' : '';
+    document.getElementById('readerContent').innerHTML =
+      img + sanitizeHtml(p.content || '<p>' + esc(stripHtml(p.excerpt)) + '</p>');
+    var r = document.getElementById('reader');
+    r.classList.add('open'); r.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeReader(){
+    document.getElementById('reader').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeReader();
+  });
+  document.getElementById('reader').addEventListener('click', function(e){
+    if(e.target === this) closeReader();
+  });
+
+  async function loadRedaksi(){
+    var grid = document.getElementById('redaksiGrid');
+    if(!WP_SITE){
+      grid.innerHTML = redaksiCard(
+        '<div class="thumb">' + THUMB_FALLBACK + '</div>' +
+        '<div class="card-body">' +
+        '<h3>Rubrik ini menunggu tulisan pertama Anda ✍️</h3>' +
+        '<p>Buat blog gratis di wordpress.com, lalu isi alamatnya pada baris ' +
+        '<b>WP_SITE</b> di dalam file website ini. Setelah itu, setiap berita yang Anda ' +
+        'tulis di WordPress (bisa dari HP) akan otomatis tampil di sini.</p>' +
+        '<div class="meta">Redaksi · Belum tersambung</div></div>'
+      );
+      return;
+    }
+    try{
+      var api = 'https://public-api.wordpress.com/rest/v1.1/sites/' +
+                encodeURIComponent(WP_SITE) +
+                '/posts/?number=6&fields=title,URL,excerpt,date,featured_image,content';
+      var r = await fetchTimeout(api, 8000);
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+      var posts = (d.posts || []).filter(function(p){ return p.title; });
+      if(!posts.length){
+        grid.innerHTML = redaksiCard(
+          '<div class="thumb">' + THUMB_FALLBACK + '</div>' +
+          '<div class="card-body"><h3>Belum ada tulisan yang terbit</h3>' +
+          '<p>Blog WordPress Anda sudah tersambung. Terbitkan tulisan pertama di ' +
+          esc(WP_SITE) + ' dan dia akan muncul di sini.</p>' +
+          '<div class="meta">Redaksi · Tersambung ✓</div></div>'
+        );
+        return;
+      }
+      redaksiPosts = posts;
+      grid.innerHTML = posts.map(function(p, i){
+        var img = p.featured_image
+          ? '<img src="' + esc(p.featured_image) + '" alt="" ' +
+            'style="width:100%;height:100%;object-fit:cover">'
+          : THUMB_FALLBACK;
+        return redaksiCard(
+          '<div class="thumb">' + img + '</div>' +
+          '<div class="card-body">' +
+          '<h3>' + esc(stripHtml(p.title)) + '</h3>' +
+          '<p>' + esc(stripHtml(p.excerpt).slice(0, 150)) + '…</p>' +
+          '<div class="meta">Redaksi Akuruna · ' + (fmtTgl(p.date) || '') +
+          ' · Klik untuk membaca</div></div>',
+          i
+        );
+      }).join('');
+      liveOK.news = true; setLiveBadge();
+    }catch(e){
+      grid.innerHTML = redaksiCard(
+        '<div class="thumb">' + THUMB_FALLBACK + '</div>' +
+        '<div class="card-body"><h3>Gagal memuat tulisan redaksi</h3>' +
+        '<p>Periksa: alamat di WP_SITE sudah benar? Blog WordPress-nya publik ' +
+        '(bukan privat)? Lalu muat ulang halaman ini.</p>' +
+        '<div class="meta">Redaksi · Error koneksi</div></div>'
+      );
+    }
+  }
+
+  loadPrices();
+  loadNews();
+  loadRedaksi();
+  setInterval(loadPrices, 60 * 1000);      // harga: tiap 60 detik
+  setInterval(loadNews, 5 * 60 * 1000);    // berita: tiap 5 menit
+  setInterval(loadRedaksi, 5 * 60 * 1000); // tulisan redaksi: tiap 5 menit
+
+  // Nav aktif mengikuti posisi scroll
+  var sections = document.querySelectorAll('main section[id]');
+  var navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', function(){
+    var pos = window.pageYOffset + 140;
+    var currentId = '';
+    sections.forEach(function(s){ if(s.offsetTop <= pos) currentId = '#' + s.id; });
+    navLinks.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === (currentId || '#'));
+    });
+  }, {passive:true});
+</script>
+</body>
+</html>
