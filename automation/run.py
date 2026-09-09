@@ -44,7 +44,7 @@ def source_get(url, hosts):
             if r.status_code in (301,302,303,307,308):
                 url=urljoin(url,r.headers.get("Location","")); continue
             if r.status_code != 200:
-                raise JobError("Sumber tidak dapat dibaca; tidak melewati pembatasan akses.")
+                raise JobError(f"Sumber gagal diakses: HTTP {r.status_code}")
             data=bytearray()
             for chunk in r.iter_content(65536):
                 data.extend(chunk)
