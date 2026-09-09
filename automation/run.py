@@ -104,7 +104,7 @@ def article_text(item,config):
         except (ValueError,RecursionError): continue
         if len(body)>=1000: return body[:14000]
     blocks=[]
-    for article in soup.select('article, [itemprop="articleBody"]'):
+    for article in soup.select('article, [itemprop="articleBody"], .article-content-wrapper .document-body'):
         blocks.append(" ".join(plain(str(p)) for p in article.select("p") if len(p.get_text(strip=True))>50))
     result=max(blocks,key=len,default="")
     if len(result)<1000: raise JobError("Isi artikel tidak cukup; jangan membuat berita dari judul saja.")
