@@ -283,7 +283,9 @@ def main():
     if not items: save_report({"state":"no_fresh_source"});print("Tidak ada sumber baru yang memenuhi syarat.");return
     for item in items[:8]:
         try: source=article_text(item,config)
-        except (JobError,requests.RequestException): print("Satu sumber tidak cukup lengkap; dilewati.");continue
+        except (JobError,requests.RequestException) as e:
+            print("Gagal membaca sumber:", str(e))
+            continue
         reserved=bridge("reserve",source_url=item["url"],draft=args.mode=="draft")
         if not reserved.get("reserved"): continue
         job_id=reserved["id"]
