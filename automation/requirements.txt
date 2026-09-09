@@ -1,0 +1,4 @@
+requests==2.34.2
+feedparser==6.0.14
+beautifulsoup4==4.15.0
+Pillow==12.3.0

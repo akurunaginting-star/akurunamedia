@@ -1,0 +1,11 @@
+{
+  "feeds": ["https://www.coindesk.com/arc/outboundfeeds/rss/"],
+  "source_hosts": ["www.coindesk.com", "coindesk.com"],
+  "keywords": ["bitcoin", "btc", "crypto", "ethereum", "federal reserve", "inflation"],
+  "exclude_keywords": ["sponsored", "press release", "advertorial", "price prediction"],
+  "max_age_hours": 24,
+  "text_model": "gpt-4.1-mini",
+  "image_model": "gpt-image-1-mini",
+  "image_quality": "medium",
+  "caption_footer": "Baca artikel di akurunamedia.id.\nIlustrasi AI · Akuruna Media\n#Bitcoin #Kripto #AkurunaMedia"
+}
