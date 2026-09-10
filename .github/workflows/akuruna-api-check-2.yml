@@ -1,0 +1,110 @@
+name: Akuruna API Check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: akuruna-api-check
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: |
+          python -m pip install -r automation/requirements.txt
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-dejavu-core
+      - name: Check API
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        shell: bash
+        run: |
+          python - <<'PYTHON'
+          import json, os, re, runpy, sys
+          from pathlib import Path
+          import requests
+          
+          def main():
+              key=os.environ.get('OPENAI_API_KEY','')
+              if not key:
+                  print('OPENAI_API_KEY belum tersedia.'); return 1
+              runner=runpy.run_path('automation/run.py',run_name='diagnostic_import')
+              config=json.loads(Path('automation/config.json').read_text())
+              result={'state':'started','calls':[]}; stage='source'; calls=0
+              output=Path('api-check-output'); output.mkdir(exist_ok=True)
+              class StopCheck(Exception): pass
+              def clean(value):
+                  text=str(value or '').replace(key,'[REDACTED]')
+                  return re.sub(r'sk-[A-Za-z0-9_-]+','[REDACTED]',text)[:1600]
+              def api(path,body,timeout=120):
+                  nonlocal calls
+                  expected=['responses','responses','images/generations']
+                  if calls>=3 or path!=expected[calls]: raise RuntimeError('Unexpected API sequence')
+                  calls+=1
+                  info={'stage':stage,'endpoint':path,'model':body.get('model')}
+                  result['calls'].append(info)
+                  print('Tahap: '+stage,flush=True)
+                  try:
+                      r=requests.post('https://api.openai.com/v1/'+path,headers={'Authorization':'Bearer '+key},json=body,timeout=(10,timeout),allow_redirects=False)
+                  except requests.RequestException:
+                      result.update(state='network_error',stage=stage);raise StopCheck()
+                  info['http_status']=r.status_code
+                  try:data=r.json()
+                  except ValueError:data={}
+                  if not r.ok:
+                      error=data.get('error',{}) if isinstance(data,dict) else {}
+                      if not isinstance(error,dict):error={}
+                      result.update(state='api_rejected',stage=stage,error={k:clean(error.get(k)) for k in ('type','code','param','message')});raise StopCheck()
+                  if path=='responses':info['response_status']=data.get('status')
+                  return data
+              def forbidden(*args,**kwargs):raise RuntimeError('Bridge disabled in diagnostic')
+              writer=runner['write_article'];writer.__globals__['openai']=api;writer.__globals__['bridge']=forbidden
+              original_structured=writer.__globals__['structured']
+              def structured(model,instructions,value,schema,name):
+                  nonlocal stage
+                  stage=name
+                  return original_structured(model,instructions,value,schema,name)
+              writer.__globals__['structured']=structured
+              try:
+                  item=None
+                  for candidate in runner['candidates'](config)[:8]:
+                      try:source=runner['article_text'](candidate,config)
+                      except (runner['JobError'],requests.RequestException):continue
+                      item=candidate;break
+                  if item is None:
+                      result.update(state='source_unavailable');raise StopCheck()
+                  article=writer(item,source,config)
+                  # Save generated draft, never source text or evidence quotations.
+                  preview={k:article[k] for k in ('title','headline','excerpt','caption','paragraphs','approved','review_notes')}
+                  (output/'draft.json').write_text(json.dumps(preview,ensure_ascii=False,indent=2))
+                  if not article['approved']:
+                      result.update(state='editor_rejected',stage='editor_review',reason=clean(article['review_notes']));raise StopCheck()
+                  stage='image_generation'
+                  background=runner['generate_background'](article,config)
+                  stage='image_render'
+                  jpg=runner['render'](background,article['headline'])
+                  (output/'instagram.jpg').write_bytes(jpg)
+                  (output/'caption.txt').write_text(article['caption'])
+                  result.update(state='draft_artifacts_ready',stage='finished')
+              except StopCheck:pass
+              except runner['JobError'] as e:result.update(state='validation_error',stage=stage,message=clean(e))
+              except Exception as e:result.update(state='local_error',stage=stage,error_type=type(e).__name__)
+              print(json.dumps(result,ensure_ascii=False,indent=2))
+              (output/'report.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
+              return 0 if result['state']=='draft_artifacts_ready' else 1
+          
+          if __name__=='__main__':sys.exit(main())
+          PYTHON
+      - name: Save diagnostic files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: akuruna-api-check-${{ github.run_id }}
+          path: api-check-output/
+          retention-days: 7
