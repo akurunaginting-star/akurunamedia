@@ -27,6 +27,9 @@ class JobError(Exception):
     pass
 
 
+BLOCKED_SOURCE_HOSTS = set()
+
+
 def canonical(url):
     p = urlsplit(url)
     if p.scheme != "https" or p.username or p.password or p.port not in (None,443):
@@ -40,9 +43,15 @@ def source_get(url, hosts):
         url = canonical(url)
         if urlsplit(url).hostname not in hosts:
             raise JobError("Domain sumber/redirect tidak masuk source_hosts.")
+        host = urlsplit(url).hostname
+        if host.removeprefix("www.") in BLOCKED_SOURCE_HOSTS:
+            raise JobError("Domain sumber dijeda setelah HTTP 429; coba pada jadwal berikutnya.")
         with SESSION.get(url,timeout=(10,30),allow_redirects=False,stream=True) as r:
             if r.status_code in (301,302,303,307,308):
                 url=urljoin(url,r.headers.get("Location","")); continue
+            if r.status_code == 429:
+                BLOCKED_SOURCE_HOSTS.add(host.removeprefix("www."))
+                raise JobError("HTTP 429: domain sumber dijeda untuk sisa proses ini. Tidak mencoba ulang.")
             if r.status_code != 200:
                 raise JobError(f"Sumber gagal diakses: HTTP {r.status_code}")
             data=bytearray()
@@ -281,9 +290,11 @@ def main():
     if not os.environ.get("OPENAI_API_KEY"): raise JobError("Isi OPENAI_API_KEY sebelum memulai.")
     items=candidates(config)
     if not items: save_report({"state":"no_fresh_source"});print("Tidak ada sumber baru yang memenuhi syarat.");return
+    source_failures = 0
     for item in items[:8]:
         try: source=article_text(item,config)
         except (JobError,requests.RequestException) as e:
+            source_failures += 1
             print("Gagal membaca sumber:", str(e))
             continue
         reserved=bridge("reserve",source_url=item["url"],draft=args.mode=="draft")
@@ -306,6 +317,9 @@ def main():
         result=bridge("save",id=job_id,article={k:a[k] for k in ["title","headline","excerpt","caption","paragraphs","approved","review_notes"]})
         save_report({"job_id":job_id,"source_url":item["url"],"article":a,"result":result})
         print(json.dumps(result,ensure_ascii=False));return
+    if source_failures == len(items[:8]):
+        save_report({"state":"source_unavailable", "failed_sources":source_failures})
+        raise JobError("Semua kandidat sumber gagal dibaca. Tidak ada draf dibuat; periksa akses sumber.")
     save_report({"state":"no_new_usable_source"});print("Semua sumber sudah diproses atau belum layak.")
 
 
