@@ -96,6 +96,13 @@ def candidates(config, now=None):
 def article_text(item,config):
     if len(item["feed_text"])>=1200: return item["feed_text"][:14000]
     soup=BeautifulSoup(source_get(item["url"],config["source_hosts"]),"html.parser")
+    # Decrypt's article paragraphs live directly inside div.post-content.
+    if urlsplit(item["url"]).hostname in ("decrypt.co", "www.decrypt.co"):
+        for container in soup.select("div.post-content"):
+            paragraphs = [plain(str(p)) for p in container.find_all("p", recursive=False)]
+            body = " ".join(p for p in paragraphs if p)
+            if len(body) >= 1000:
+                return body[:14000]
     # Prefer explicit articleBody over arbitrary page text (menus/ads aren't evidence).
     def find_body(value):
         if isinstance(value,dict):
