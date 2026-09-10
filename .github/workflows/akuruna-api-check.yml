@@ -1,0 +1,115 @@
+name: Akuruna API Check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: akuruna-api-check
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -r automation/requirements.txt
+      - name: Check API
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        shell: bash
+        run: |
+          python - <<'PYTHON'
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import runpy
+          import sys
+          import requests
+          
+          
+          def main():
+              key = os.environ.get('OPENAI_API_KEY', '')
+              if not key:
+                  print('OPENAI_API_KEY belum tersedia di GitHub Secrets.')
+                  return 1
+              runner = runpy.run_path('automation/run.py', run_name='akuruna_diagnostic_import')
+              config = json.loads(Path('automation/config.json').read_text())
+              writer = runner['write_article']
+              result = {}
+          
+              class CheckFinished(Exception):
+                  pass
+          
+              def clean(value):
+                  text = str(value or '').replace(key, '[REDACTED]')
+                  text = re.sub(r'sk-[A-Za-z0-9_-]+', '[REDACTED]', text)
+                  return text[:1600]
+          
+              def check_api(path, body, timeout=120):
+                  if path != 'responses':
+                      raise RuntimeError('Pemeriksaan hanya diizinkan untuk Responses API.')
+                  # Same request format/schema as installed runner; cap output for this check.
+                  body = dict(body)
+                  body['max_output_tokens'] = 64
+                  try:
+                      response = requests.post(
+                          'https://api.openai.com/v1/responses',
+                          headers={'Authorization': 'Bearer ' + key}, json=body,
+                          timeout=(10,90), allow_redirects=False)
+                  except requests.RequestException:
+                      result.update(state='network_error')
+                      raise CheckFinished()
+                  result.update(http_status=response.status_code, model=body.get('model'))
+                  try:
+                      data = response.json()
+                  except ValueError:
+                      data = {}
+                  if response.ok:
+                      result.update(state='request_accepted', response_status=data.get('status'))
+                      print('Permintaan diterima. Ini hanya cek format/API; bukan bukti alur publikasi berhasil.')
+                      print('Status incomplete dapat muncul karena keluaran tes dibatasi 64 token.')
+                  else:
+                      error = data.get('error', {}) if isinstance(data,dict) else {}
+                      if not isinstance(error,dict): error = {}
+                      result.update(state='api_rejected', error={
+                          name:clean(error.get(name)) for name in ('type','code','param','message')})
+                  raise CheckFinished()
+          
+              # Intercept before any generation/review/upload path can continue.
+              writer.__globals__['openai'] = check_api
+              def blocked_bridge(*args, **kwargs):
+                  raise RuntimeError('WordPress/bridge tidak dipanggil dalam pemeriksaan API.')
+              writer.__globals__['bridge'] = blocked_bridge
+              sample = ('This is a fictional diagnostic sample for testing an API request. '
+                        'No real financial event is described by this sample. ' * 24)
+              item = {'url':'https://example.com/diagnostic', 'published':'2026-09-10T00:00:00Z'}
+              source = sample
+              result['source_kind'] = 'synthetic_sample'
+              try:
+                  for candidate in runner['candidates'](config)[:8]:
+                      try:
+                          source = runner['article_text'](candidate, config)
+                      except (runner['JobError'], requests.RequestException):
+                          continue
+                      item = candidate
+                      result['source_kind'] = 'current_feed_article'
+                      break
+                  writer(item, source, config)
+              except CheckFinished:
+                  pass
+              except runner['JobError'] as error:
+                  result.update(state='local_validation_error', message=clean(error))
+              except Exception:
+                  result.update(state='local_diagnostic_error')
+              print(json.dumps(result, ensure_ascii=False, indent=2))
+              Path('api-check-result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
+              return 0 if result.get('state') == 'request_accepted' else 1
+          
+          if __name__ == '__main__':
+              sys.exit(main())
+          PYTHON
