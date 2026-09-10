@@ -175,6 +175,22 @@ REVIEW=obj({"approved":{"type":"boolean"},"reason":STRING})
 
 
 def validate_generated(a,source,footer):
+    # Use a complete existing sentence if the optional preview is invalid.
+    excerpt = a.get("excerpt")
+    if not isinstance(excerpt, str) or not excerpt.strip() or len(excerpt) > 500:
+        alternatives = []
+        if isinstance(excerpt, str):
+            alternatives.append(excerpt)
+        if isinstance(a.get("paragraphs"), list):
+            alternatives.extend(p for p in a["paragraphs"] if isinstance(p, str))
+        for text in alternatives:
+            sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+            if sentences and 0 < len(sentences[0]) <= 500:
+                a["excerpt"] = sentences[0]
+                break
+        else:
+            # A valid title is a complete fallback preview, reviewed with the article.
+            a["excerpt"] = a.get("title", "")
     for field,maximum in [("title",160),("headline",110),("excerpt",500),("caption",1500),("image_prompt",1400)]:
         if not isinstance(a.get(field),str) or not a[field].strip() or len(a[field])>maximum:
             raise JobError("Panjang/format "+field+" tidak sesuai; tidak dipotong sembarangan.")
