@@ -82,6 +82,8 @@ jobs:
                   article=writer(item,source,config)
                   # Save generated draft, never source text or evidence quotations.
                   preview={k:article[k] for k in ('title','headline','excerpt','caption','paragraphs','approved','review_notes')}
+                  preview["source_url"] = item["url"]
+                  preview["source_published"] = item["published"]
                   (output/'draft.json').write_text(json.dumps(preview,ensure_ascii=False,indent=2))
                   if not article['approved']:
                       result.update(state='editor_rejected',stage='editor_review',reason=clean(article['review_notes']));raise StopCheck()
