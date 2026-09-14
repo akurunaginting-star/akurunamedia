@@ -44,8 +44,8 @@ jobs:
                   return re.sub(r'sk-[A-Za-z0-9_-]+','[REDACTED]',text)[:1600]
               def api(path,body,timeout=120):
                   nonlocal calls
-                  expected=['responses','responses','images/generations']
-                  if calls>=3 or path!=expected[calls]: raise RuntimeError('Unexpected API sequence')
+                  expected=['responses','responses','responses','images/generations']
+                  if calls>=len(expected) or path!=expected[calls]: raise RuntimeError('Unexpected API sequence')
                   calls+=1
                   info={'stage':stage,'endpoint':path,'model':body.get('model')}
                   result['calls'].append(info)
