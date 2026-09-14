@@ -251,6 +251,24 @@ Bandingkan seluruh judul, headline, artikel dan caption dengan sumber. approved 
 angka/tanggal tepat, bandingkan secara eksplisit pasangan harga dan waktu di semua bagian, tidak ada kontradiksi waktu, tidak ada klaim akses sumber lain, atribusi jelas, dan tulisan memparafrase.
 Tolak tuduhan kejahatan/pelanggaran terhadap orang nyata, rumor, konten sponsor, promosi investasi, dan berita yang membutuhkan verifikasi tambahan.
 Periksa image_prompt: hanya ilustrasi simbolis tanpa tokoh nyata atau kejadian rekaan yang tampak dokumenter.
+Bedakan isi berita dari footer sistem pada caption. Tagar, label Ilustrasi AI,
+dan ajakan Baca artikel di adalah metadata yang diizinkan; jangan dianggap
+klaim berita, instruksi untuk pemeriksa, atau alasan penolakan.
+Caption boleh memakai paragraf artikel secara utuh selama batas panjang
+yang diperiksa program terpenuhi.
+
+Jangan menambahkan syarat yang tidak relevan: kata konsesi tidak otomatis
+sensasional jika sumber menyebut concessions. Klaim yang diberitakan sumber
+boleh diparafrase dengan atribusi yang jelas; jangan mengharuskan pernyataan
+resmi untuk setiap klaim. Tetap tolak jika atribusi hilang atau kepastiannya
+diperkuat melebihi sumber.
+
+Periksa fakta terhadap source_text lengkap. Daftar evidence hanya cuplikan:
+ketiadaan angka di evidence tidak berarti angka itu tidak ada di source_text.
+Pisahkan persoalan kepemilikan kripto pejabat dari persoalan imbal hasil
+stablecoin; jangan menggabungkan subjek atau ketentuan yang berbeda.
+Setiap alasan penolakan harus menunjuk kalimat bermasalah dan menjelaskan
+ketidaksesuaian dengan sumber atau aturan, bukan preferensi pribadi.
 Cuplikan evidence bukan bukti mandiri atas kebenaran sumber; bila ragu approved false. reason singkat dalam bahasa Indonesia.""",
         {"source_published":item["published"],"source_text":source,"draft":a},REVIEW,"editor_review")
     if not isinstance(review.get("approved"),bool) or not isinstance(review.get("reason"),str): raise JobError("Hasil pemeriksaan tidak valid.")
