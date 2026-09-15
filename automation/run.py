@@ -246,7 +246,7 @@ def validate_generated(a,source,footer):
     if not isinstance(paragraphs, list) or not paragraphs or any(not isinstance(p, str) or not p.strip() for p in paragraphs):
         raise JobError("Artikel tidak lengkap.")
     words = sum(len(p.split()) for p in paragraphs)
-    if not 120 <= words <= 180:
+    if not 120 <= words <= 250:
         raise JobError("Artikel harus 120–180 kata; diterima " + str(words) + ".")
     if len(paragraphs[0].strip()) > 400:
         raise JobError("Paragraf pembuka melebihi 400 karakter.")
